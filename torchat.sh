@@ -20,6 +20,26 @@ function error_exit() {
     exit 1
 }
 
+function show_help() {
+    echo -e "${BOLD}Usage:${NC} torcon [OPTIONS]"
+    echo -e ""
+    echo -e "${BOLD}Options:${NC}"
+    echo -e "  ${CYAN}-l, --listen${NC}           Run in listen mode (server)"
+    echo -e "  ${CYAN}-p, --port <PORT>${NC}     Set custom port (default: ${YELLOW}$DEFAULT_PORT${NC})"
+    echo -e "  ${CYAN}-k, --key <KEY>${NC}       Set custom encryption key (default: ${YELLOW}$DEFAULT_KEY${NC})"
+    echo -e "  ${CYAN}-h, --help${NC}            Show this help message and exit"
+    echo -e ""
+    echo -e "${BOLD}Examples:${NC}"
+    echo -e "  torcon                          # Run in client mode (default)"
+    echo -e "  torcon -p 9000 -k mypass        # Client with custom port/key"
+    echo -e "  torcon -l                       # Listener with default settings"
+    echo -e "  torcon -l -p 8888 -k secretkey  # Listener with custom settings"
+    echo -e ""
+    echo -e "${BOLD}Note:${NC} Usernames and .onion addresses must be defined in '${ENV_FILE}' as:"
+    echo -e "  username1=exampleonionaddress.onion"
+    exit 0
+}
+
 # Parse CLI arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -35,8 +55,11 @@ while [[ $# -gt 0 ]]; do
             MODE="server"
             shift
             ;;
+        -h|--help)
+            show_help
+            ;;
         *)
-            error_exit "Unknown option: $1"
+            error_exit "Unknown option: $1. Use --help to see available options."
             ;;
     esac
 done
@@ -48,7 +71,6 @@ KEY="${KEY:-$DEFAULT_KEY}"
 # SERVER MODE
 if [[ "$MODE" == "server" ]]; then
     echo -e "${GREEN}[LISTEN MODE]${NC} Waiting for connection on port ${YELLOW}$PORT${NC} with key ${CYAN}$KEY${NC}..."
-    #echo -e "${YELLOW}Command:${NC} cryptcat -l -p $PORT -k $KEY"
     cryptcat -l -p "$PORT" -k "$KEY"
     exit 0
 fi
@@ -59,22 +81,14 @@ echo -en "${CYAN}Enter username: ${NC}"
 read USERNAME
 
 # Check if .env exists
-[[ ! -f "$ENV_FILE" ]] && error_exit "Missing .env file."
+[[ ! -f "$ENV_FILE" ]] && error_exit "Missing $ENV_FILE file."
 
 # Fetch onion address
 ONION=$(grep "^${USERNAME}=" "$ENV_FILE" | cut -d '=' -f2)
 
 [[ -z "$ONION" ]] && error_exit "Username '$USERNAME' not found in $ENV_FILE."
 
-# Print config
-echo -e "${YELLOW}Connecting to Hidden Service...${NC}"
-# echo -e "${GREEN}Username: ${NC}$USERNAME"
-# echo -e "${GREEN}Onion ID: ${NC}$ONION"
-# echo -e "${GREEN}Port:     ${NC}$PORT"
-# echo -e "${GREEN}Key:      ${NC}$KEY"
-# echo ""
-
 # Start connection with cryptcat (client)
 echo -e "${CYAN}Connecting...${NC}"
-torsocks cryptcat "$ONION" "$PORT" -k "$KEY" && echo -e "${GREEN}Connected.${NC}\n${BOLD}${USERNAME}@connection# ${NC}"
-   
+torsocks cryptcat "$ONION" "$PORT" -k "$KEY" && echo -e "${GREEN}Connected.${NC}\n${BOLD}Th334GL35@torchat# ${NC}"
+  
