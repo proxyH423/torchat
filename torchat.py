@@ -24,7 +24,7 @@ def read_tor_port():
         return None
     with open(TORRC_PATH, "r") as f:
         for line in f:
-            if line.strip().startswith("SocksPort"):
+            if line.strip().startswith("HiddenServicePort"):
                 match = re.search(r"\b(\d+)\b", line)
                 if match:
                     return match.group(1)
