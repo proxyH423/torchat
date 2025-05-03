@@ -21,7 +21,7 @@ function error_exit() {
 }
 
 function show_help() {
-    echo -e "${BOLD}Usage:${NC} torcon [OPTIONS]"
+    echo -e "${BOLD}Usage:${NC} torchat [OPTIONS]"
     echo -e ""
     echo -e "${BOLD}Options:${NC}"
     echo -e "  ${CYAN}-l, --listen${NC}           Run in listen mode (server)"
@@ -30,10 +30,10 @@ function show_help() {
     echo -e "  ${CYAN}-h, --help${NC}            Show this help message and exit"
     echo -e ""
     echo -e "${BOLD}Examples:${NC}"
-    echo -e "  torcon                          # Run in client mode (default)"
-    echo -e "  torcon -p 9000 -k mypass        # Client with custom port/key"
-    echo -e "  torcon -l                       # Listener with default settings"
-    echo -e "  torcon -l -p 8888 -k secretkey  # Listener with custom settings"
+    echo -e "  torchat                          # Run in client mode (default)"
+    echo -e "  torcchat -p 9000 -k mypass        # Client with custom port/key"
+    echo -e "  torchat -l                       # Listener with default settings"
+    echo -e "  torchat -l -p 8888 -k secretkey  # Listener with custom settings"
     echo -e ""
     echo -e "${BOLD}Note:${NC} Usernames and .onion addresses must be defined in '${ENV_FILE}' as:"
     echo -e "  username1=exampleonionaddress.onion"
