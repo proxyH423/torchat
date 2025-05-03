@@ -90,5 +90,5 @@ ONION=$(grep "^${USERNAME}=" "$ENV_FILE" | cut -d '=' -f2)
 
 # Start connection with cryptcat (client)
 echo -e "${CYAN}Connecting...${NC}"
-torsocks cryptcat "$ONION" "$PORT" -k "$KEY" && echo -e "${GREEN}Connected.${NC}\n${BOLD}Th334GL35@torchat# ${NC}"
+torsocks cryptcat "$ONION" "$PORT" -k "$KEY" && echo -e "${GREEN}Connected.${NC}\n${BOLD}${USERNAME}@torchat# ${NC}"
   
