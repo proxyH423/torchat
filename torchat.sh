@@ -75,7 +75,7 @@ function get_hidden_service_port() {
 function format_chat() {
     local NAME="$1"
     local COLOR="$2"
-    echo -en "${COLOR}${NAME}${NC}> "
+    echo -en "\n${COLOR}${NAME}${NC}> "
 }
 
 # === Start Here ===
@@ -102,11 +102,10 @@ if [[ "$MODE" == "server" ]]; then
     read SERVER_NAME
     echo -e "${GREEN}[LISTENING]${NC} on port ${YELLOW}${PORT}${NC} with key ${CYAN}${KEY}${NC}..."
     
-    # Accept the first line as client name
     cryptcat -l -p "$PORT" -k "$KEY" | while read -r line; do
         if [[ -z "$CLIENT_NAME" ]]; then
             CLIENT_NAME="$line"
-            echo -e "${CYAN}[CONNECTED]${NC} Client name is: ${YELLOW}${CLIENT_NAME}${NC}"
+            echo -e "\n${CYAN}[CONNECTED]${NC} Client name is: ${YELLOW}${CLIENT_NAME}${NC}"
         else
             format_chat "$CLIENT_NAME" "$YELLOW"
             echo "$line"
@@ -131,7 +130,6 @@ ONION=$(grep "^${SERVER_USERNAME}=" "$ENV_FILE" | cut -d '=' -f2)
 
 echo -e "${CYAN}[CONNECTING]${NC} to ${YELLOW}${ONION}:${PORT}${NC} with key ${CYAN}${KEY}${NC}..."
 
-# Use a pipe to send name first, then continue chatting
 {
     echo "$CLIENT_NAME"
     while true; do
