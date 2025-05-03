@@ -41,7 +41,7 @@ def print_info(message):
     print(f"\n{CYAN}{message}{NC}")
 
 def install_required_tools():
-    tools = ["tor", "cryptcat"]
+    tools = ["tor", "cryptcat", "torsocks"]
     for tool in tools:
         if subprocess.call(f"which {tool} > /dev/null", shell=True) != 0:
             print_info(f"Installing {tool}...")
